@@ -21,7 +21,7 @@ func main() {
 
 func load_environment() {
 	// Load the .env file
-	error := godotenv.Load("../.env")
+	error := godotenv.Load(".env")
 	if error != nil {
 		log.Fatal("Error loading .env file")
 	}

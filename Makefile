@@ -1,43 +1,50 @@
-create-table-script = `cat sql/create_table.sql`
-create-role-script = `cat sql/create_role.sql`
-drop-table-script = `cat sql/drop_table.sql`
-drop-role-script = `cat sql/drop_role.sql`
+create_table_script = `cat sql/create_table.sql`
+create_role_script = `cat sql/create_role.sql`
+drop_table_script = `cat sql/drop_table.sql`
+drop_role_script = `cat sql/drop_role.sql`
 
-sql-server = postgres
+go_cmd = go
+go_run = ${go_cmd} run
+go_test = ${go_cmd} test -v
 
-docker = docker container
-start-sql-server = ${docker} run --name ${sql-server} -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
-stop-sql-server = ${docker} stop ${sql-server}
-rm-sql-server = ${docker} rm ${sql-server}
-execute-on-sql-server = ${docker} exec ${sql-server} 
-psql-command = psql -U postgres
+docker = docker
+docker_container = ${docker} container
+docker_container_run = ${docker_container} run
+docker_container_stop = ${docker_container} stop
+docker_container_rm = ${docker_container} rm
+docker_container_exec = ${docker_container} exec
 
-build:
-	@echo "todo"
+sql_server = postgres
 
-.all: build setup sql-up sql-down sql-start sql-stop sql-setup
-.PHONY: .all 
+start_sql_server = ${docker_container_run} --name ${sql_server} -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+stop_sql_server = ${docker_container_stop} ${sql_server}
+rm_sql_server = ${docker_container_rm} ${sql_server}
+execute_on_sql_server = ${docker_container_exec} ${sql_server} 
+psql_command = psql -U postgres
 
-setup: sql-up
+run:
+	@${go_run} ./src/...
 
-brew:
-	@brew bundle
+test:
+	@${go_test} ./src/...
 
-sql-up: sql-start sql-setup
+.PHONY: run test sql_up sql_down sql_start sql_setup
 
-sql-down:
+sql_up: sql_start sql_setup
+
+sql_down:
 	@echo "Stopping SQL-server"
-	@${stop-sql-server} > /dev/null
-	@echo "Removing SQL-server"
-	@${rm-sql-server} > /dev/null
+	@${stop_sql_server} > /dev/null
+	@echo "Removing SQL_server"
+	@${rm_sql_server} > /dev/null
 
-sql-start:
+sql_start:
 	@echo "Starting SQL-server"
-	@${start-sql-server} > /dev/null
+	@${start_sql_server} > /dev/null
 	@sleep 2
 
-sql-setup: sql-start
+sql_setup: sql_start
 	@echo "Creating role"
-	@${execute-on-sql-server} ${psql-command} -c "${create-role-script}" > /dev/null
+	@${execute_on_sql_server} ${psql_command} -c "${create_role_script}" > /dev/null
 	@echo "Creating table"
-	@${execute-on-sql-server} ${psql-command} -c "${create-table-script}" > /dev/null
+	@${execute_on_sql_server} ${psql_command} -c "${create_table_script}" > /dev/null
