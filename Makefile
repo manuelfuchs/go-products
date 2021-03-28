@@ -28,22 +28,22 @@ run:
 test:
 	@${go_test} ./cmd/...
 
-.PHONY: run test sql_up sql_down sql_start sql_setup
+.PHONY: run test sql-up sql-down sql-start sql-setup
 
-sql_up: sql_start sql_setup
+sql-up: sql-start sql-setup
 
-sql_down:
+sql-down:
 	@echo "Stopping SQL-server"
 	@${stop_sql_server} > /dev/null
 	@echo "Removing SQL_server"
 	@${rm_sql_server} > /dev/null
 
-sql_start:
+sql-start:
 	@echo "Starting SQL-server"
 	@${start_sql_server} > /dev/null
 	@sleep 2
 
-sql_setup: sql_start
+sql-setup: sql-start
 	@echo "Creating role"
 	@${execute_on_sql_server} ${psql_command} -c "${create_role_script}" > /dev/null
 	@echo "Creating table"
