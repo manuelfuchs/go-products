@@ -5,5 +5,5 @@ This was written with the instructions of [this post](https://semaphoreci.com/co
 ## Setup
 
 Execute the following commands:
-* `make setup`
-    * This commands installs the postgresql-server dependency outlined in the `Brewfile`, starts the postgresql-server and creates the products schema.
+* `make sql_up`
+    * This command starts a postgresql-server docker container, creates a new role and products table.
