@@ -5,7 +5,5 @@ This was written with the instructions of [this post](https://semaphoreci.com/co
 ## Setup
 
 Execute the following commands:
-* `brew bundle`
-    * This commands installs the dependencies outlined in the `Brewfile`.
-* `make sql-up`
-    * This starts the previously postgresql server and creates the products schema.
+* `make setup`
+    * This commands installs the postgresql-server dependency outlined in the `Brewfile`, starts the postgresql-server and creates the products schema.

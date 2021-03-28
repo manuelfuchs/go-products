@@ -9,6 +9,11 @@ build:
 .all: build sql-up sql-down sql-start sql-stop sql-setup sql-teardown
 .PHONY: .all 
 
+setup: brew sql-up
+
+brew:
+	@brew bundle
+
 sql-up: sql-start sql-setup
 sql-down: sql-teardown sql-stop
 
