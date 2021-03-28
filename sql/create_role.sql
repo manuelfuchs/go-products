@@ -1,0 +1,1 @@
+CREATE ROLE go_user WITH SUPERUSER LOGIN ENCRYPTED PASSWORD 'this is a very secury password'

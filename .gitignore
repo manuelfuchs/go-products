@@ -23,7 +23,4 @@
 /vendor/
 /Godeps/
 
-### Homebrew ###
-Brewfile.lock.json
-
-# End of https://www.toptal.com/developers/gitignore/api/go,homebrew
+# End of https://www.toptal.com/developers/gitignore/api/go
