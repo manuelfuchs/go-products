@@ -17,8 +17,6 @@ type App struct {
 func (a *App) Initialize(user, password, database string) {
 	connectionString := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, database)
 
-	fmt.Println(connectionString)
-
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
