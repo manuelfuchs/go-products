@@ -102,3 +102,26 @@ func getProductsInPriceRange(db *sql.DB, minPrice, maxPrice int) ([]product, err
 
 	return products, nil
 }
+
+func getProductsBySearchtext(db *sql.DB, searchtext string) ([]product, error) {
+	rows, err := db.Query(
+		"SELECT id, name, price FROM products WHERE name LIKE $1", "%"+searchtext+"%")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	products := []product{}
+
+	for rows.Next() {
+		var p product
+		if err := rows.Scan(&p.ID, &p.Name, &p.Price); err != nil {
+			return nil, err
+		}
+		products = append(products, p)
+	}
+
+	return products, nil
+}

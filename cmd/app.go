@@ -66,6 +66,7 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc(
 		"/products/between/{minPrice:[0-9]+}/and/{maxPrice:[0-9]+}",
 		a.getProductsInPriceRange).Methods("GET")
+	a.Router.HandleFunc("/products/containing/{searchtext}", a.getProductsBySearchtext).Methods("GET")
 }
 
 func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
@@ -202,6 +203,24 @@ func (a *App) getProductsInPriceRange(w http.ResponseWriter, r *http.Request) {
 	}
 
 	products, err := getProductsInPriceRange(a.DB, minPrice, maxPrice)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, products)
+}
+
+func (a *App) getProductsBySearchtext(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	searchtext := vars["searchtext"]
+	if len(searchtext) == 0 {
+		respondWithError(w, http.StatusBadRequest, "Invalid search text")
+		return
+	}
+
+	products, err := getProductsBySearchtext(a.DB, searchtext)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return

@@ -175,6 +175,17 @@ func TestGetProductsInPriceRange(t *testing.T) {
 	checkResponseCode(t, http.StatusOK, response.Code)
 }
 
+func TestGetProductsBySearchtext(t *testing.T) {
+	init_testing()
+
+	clearTable()
+	addProducts(5)
+
+	req, _ := http.NewRequest("GET", "/products/containing/Product", nil)
+	response := executeRequest(req)
+	checkResponseCode(t, http.StatusOK, response.Code)
+}
+
 func ensureTableExists() {
 	if _, err := a.DB.Exec(tableCreationQuery); err != nil {
 		log.Fatal(err)
