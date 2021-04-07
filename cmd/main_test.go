@@ -153,6 +153,28 @@ func TestDeleteProduct(t *testing.T) {
 	checkResponseCode(t, http.StatusNotFound, response.Code)
 }
 
+func TestGetProductsBelowPrize(t *testing.T) {
+	init_testing()
+
+	clearTable()
+	addProducts(5)
+
+	req, _ := http.NewRequest("GET", "/products/below/3", nil)
+	response := executeRequest(req)
+	checkResponseCode(t, http.StatusOK, response.Code)
+}
+
+func TestGetProductsInPriceRange(t *testing.T) {
+	init_testing()
+
+	clearTable()
+	addProducts(5)
+
+	req, _ := http.NewRequest("GET", "/products/between/2/and/4", nil)
+	response := executeRequest(req)
+	checkResponseCode(t, http.StatusOK, response.Code)
+}
+
 func ensureTableExists() {
 	if _, err := a.DB.Exec(tableCreationQuery); err != nil {
 		log.Fatal(err)

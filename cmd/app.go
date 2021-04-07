@@ -62,6 +62,10 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.getProduct).Methods("GET")
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.updateProduct).Methods("PUT")
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.deleteProduct).Methods("DELETE")
+	a.Router.HandleFunc("/products/below/{maxPrice:[0-9]+}", a.getProductsBelowPrice).Methods("GET")
+	a.Router.HandleFunc(
+		"/products/between/{minPrice:[0-9]+}/and/{maxPrice:[0-9]+}",
+		a.getProductsInPriceRange).Methods("GET")
 }
 
 func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
@@ -163,6 +167,47 @@ func (a *App) deleteProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
+}
+
+func (a *App) getProductsBelowPrice(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	maxPrice, err := strconv.Atoi(vars["maxPrice"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid maximum price")
+		return
+	}
+
+	products, err := getProductsBelowPrice(a.DB, maxPrice)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, products)
+}
+
+func (a *App) getProductsInPriceRange(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	minPrice, err := strconv.Atoi(vars["minPrice"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid min price")
+		return
+	}
+
+	maxPrice, err := strconv.Atoi(vars["maxPrice"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid max price")
+		return
+	}
+
+	products, err := getProductsInPriceRange(a.DB, minPrice, maxPrice)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, products)
 }
 
 func respondWithError(w http.ResponseWriter, code int, message string) {
