@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/go,homebrew
-# Edit at https://www.toptal.com/developers/gitignore?templates=go,homebrew
+# Created by https://www.toptal.com/developers/gitignore/api/go,homebrew,vscode
+# Edit at https://www.toptal.com/developers/gitignore?templates=go,homebrew,vscode
 
 ### Go ###
 # Binaries for programs and plugins
@@ -23,4 +23,15 @@
 /vendor/
 /Godeps/
 
-# End of https://www.toptal.com/developers/gitignore/api/go
+### Homebrew ###
+Brewfile.lock.json
+
+### vscode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# End of https://www.toptal.com/developers/gitignore/api/go,homebrew,vscode

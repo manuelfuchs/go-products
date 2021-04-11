@@ -1,5 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/manuelfuchs/Work/FH-Hagenberg/MSc/Semester2/CD/Assignments/03/go-products'
-go run ./cmd/...
-make: Leaving directory `/Users/manuelfuchs/Work/FH-Hagenberg/MSc/Semester2/CD/Assignments/03/go-products'
- 

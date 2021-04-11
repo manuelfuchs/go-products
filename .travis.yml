@@ -1,0 +1,13 @@
+os: linux
+
+language: go
+
+go:
+  - 1.16.3
+
+services:
+  - docker
+
+script:
+  - make sql-up
+  - make test
