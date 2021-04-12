@@ -1,5 +1,7 @@
 # Go Products
 
+[![Build Status](https://travis-ci.com/manuelfuchs/go-products.svg?branch=main)](https://travis-ci.com/manuelfuchs/go-products)
+
 This was written with the instructions of [this post](https://semaphoreci.com/community/tutorials/building-and-testing-a-rest-api-in-go-with-gorilla-mux-and-postgresql).
 
 ## Setup

@@ -11,3 +11,5 @@ services:
 script:
   - make sql-up
   - make test
+  - make build
+  - make sql-down

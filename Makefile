@@ -2,10 +2,15 @@ create_table_script = `cat sql/create_table.sql`
 create_role_script = `cat sql/create_role.sql`
 drop_table_script = `cat sql/drop_table.sql`
 drop_role_script = `cat sql/drop_role.sql`
+source_folder = ./cmd/
+
+bin_folder = bin
+build_artifact_name = products_server
 
 go_cmd = go
 go_run = ${go_cmd} run
 go_test = ${go_cmd} test -v
+go_build = ${go_cmd} build
 
 docker = docker
 docker_container = ${docker} container
@@ -23,10 +28,18 @@ execute_on_sql_server = ${docker_container_exec} ${sql_server}
 psql_command = psql -U postgres
 
 run:
-	@${go_run} ./cmd/...
+	@${go_run} ${source_folder}/...
+
+build:
+	@mkdir ${bin_folder} > /dev/null
+	@${go_build} -o ${bin_folder}/${build_artifact_name} ${source_folder}/...
 
 test:
-	@${go_test} ./cmd/...
+	@${go_test} ${source_folder}/...
+
+clean:
+	@echo "Removing build artifact"
+	@rm -r ${bin_folder}
 
 .PHONY: run test sql-up sql-down sql-start sql-setup
 
