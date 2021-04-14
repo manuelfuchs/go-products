@@ -9,6 +9,7 @@ services:
   - docker
 
 script:
+  - make sql-build
   - make sql-up
   - make test
   - make build
