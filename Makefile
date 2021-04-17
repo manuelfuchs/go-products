@@ -2,7 +2,7 @@ create_table_script = `cat sql/create_table.sql`
 create_role_script = `cat sql/create_role.sql`
 drop_table_script = `cat sql/drop_table.sql`
 drop_role_script = `cat sql/drop_role.sql`
-source_folder = ./app/cmd/
+backend_source_folder = ./app/backend/cmd/
 db_folder = ./app/db/
 
 bin_folder = bin
@@ -29,14 +29,13 @@ stop_sql_server = ${docker_container_stop} ${sql_server}
 rm_sql_server = ${docker_container_rm} ${sql_server}
 
 run:
-	@${go_run} ${source_folder}/...
+	@${go_run} ${backend_source_folder}/...
 
 build:
-	@mkdir ${bin_folder} > /dev/null
-	@${go_build} -o ${bin_folder}/${build_artifact_name} ${source_folder}/...
+	@${go_build} -o ${bin_folder}/${build_artifact_name} ${backend_source_folder}/...
 
 test:
-	@${go_test} ${source_folder}/...
+	@${go_test} ${backend_source_folder}/...
 
 clean:
 	@echo "Removing build artifact"
