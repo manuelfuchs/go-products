@@ -7,9 +7,9 @@ This was written with the instructions of [this post](https://semaphoreci.com/co
 ## Setup
 
 Execute the following commands:
-* `make sql-build`
+* `make db-build`
     * This command builds the db 
-* `make sql-up`
+* `make db-start`
     * This command starts a postgresql-server docker container, creates a new role and products table.
-* `make run`
+* `make start`
     * Starts the webserver

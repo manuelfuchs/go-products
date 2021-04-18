@@ -1,9 +1,6 @@
-create_table_script = `cat sql/create_table.sql`
-create_role_script = `cat sql/create_role.sql`
-drop_table_script = `cat sql/drop_table.sql`
-drop_role_script = `cat sql/drop_role.sql`
-backend_source_folder = ./app/backend/cmd/
 db_folder = ./app/db/
+backend_folder = ./app/backend/
+backend_source_folder = ./app/backend/cmd/
 
 bin_folder = bin
 build_artifact_name = products_server
@@ -20,39 +17,47 @@ docker_container_run = ${docker_container} run
 docker_container_stop = ${docker_container} stop
 docker_container_rm = ${docker_container} rm
 
-sql_server = postgres
-sql_server_image = manueltfuchs/go-products-db:latest
+backend_container = go-products-backend
+backend_image = manueltfuchs/${backend_container}:latest
+build_backend = ${docker_container_build} -t ${backend_image} .
+start_backend = ${docker_container_run} --name ${backend_container} -p 8080:80 -d ${backend_image}
+stop_backend = ${docker_container_stop} ${backend_container}
+rm_backend = ${docker_container_rm} ${backend_container}
 
-build_sql_server_image = ${docker_container_build} -t ${sql_server_image} .
-start_sql_server = ${docker_container_run} --name ${sql_server} -p 5432:5432 -d ${sql_server_image}
-stop_sql_server = ${docker_container_stop} ${sql_server}
-rm_sql_server = ${docker_container_rm} ${sql_server}
+db_container = go-products-db
+db_image = manueltfuchs/${db_container}:latest
+build_db = ${docker_container_build} -t ${db_image} .
+start_db = ${docker_container_run} --name ${db_container} -p 5432:5432 -d ${db_image}
+stop_db = ${docker_container_stop} ${db_container}
+rm_db = ${docker_container_rm} ${db_container}
 
-run:
-	@${go_run} ${backend_source_folder}/...
-
-build:
-	@${go_build} -o ${bin_folder}/${build_artifact_name} ${backend_source_folder}/...
-
-test:
-	@${go_test} ${backend_source_folder}/...
-
-clean:
-	@echo "Removing build artifact"
-	@rm -r ${bin_folder}
-
+default: start
 .PHONY: run test sql-up sql-down sql-build sql-setup
 
-sql-build:
-	@echo "Building SQL-Server image"
-	@cd ${db_folder} && ${build_sql_server_image} > /dev/null
+build:
+	@echo "Building backend image"
+	@cd ${backend_folder} && ${build_backend} > /dev/null
 
-sql-up:
-	@echo "Starting SQL-server"
-	@${start_sql_server} > /dev/null
+start:
+	@echo "Starting backend"
+	@${start_backend} > /dev/null
 
-sql-down:
-	@echo "Stopping SQL-server"
-	@${stop_sql_server} > /dev/null
-	@echo "Removing SQL_server"
-	@${rm_sql_server} > /dev/null
+stop:
+	@echo "Stopping backend"
+	@${stop_backend} > /dev/null
+	@echo "Removing backend"
+	@${rm_backend} > /dev/null
+
+db-build:
+	@echo "Building database image"
+	@cd ${db_folder} && ${build_db} > /dev/null
+
+db-start:
+	@echo "Starting database"
+	@${start_db} > /dev/null
+
+db-stop:
+	@echo "Stopping database"
+	@${stop_db} > /dev/null
+	@echo "Removing database"
+	@${rm_db} > /dev/null

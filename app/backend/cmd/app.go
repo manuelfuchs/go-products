@@ -19,6 +19,11 @@ type App struct {
 	DB     *sql.DB
 }
 
+const (
+	HOST = "db"
+	PORT = 5432
+)
+
 func load_environment() {
 	// Load the .env file
 	error := godotenv.Load(".env")
@@ -37,7 +42,10 @@ func (a *App) InitializeFromEnvironment() {
 }
 
 func (a *App) Initialize(user, password, database string) {
-	connectionString := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, database)
+	connectionString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", HOST, PORT, user, password, database)
+	fmt.Println("----------------------- debug -----------------------")
+	fmt.Println(connectionString)
+	fmt.Println("----------------------- debug -----------------------")
 
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)

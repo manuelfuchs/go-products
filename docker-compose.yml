@@ -1,0 +1,8 @@
+version: "3"
+services: 
+    db:
+        build: app/db/.
+    backend:
+        build: app/backend/.
+        ports: 
+            - 8080:80

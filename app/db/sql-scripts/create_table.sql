@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS products
+CREATE TABLE products
 (
     id SERIAL,
     name TEXT NOT NULL,
